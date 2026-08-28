@@ -1,0 +1,14 @@
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: sqlite:////data/database.db
+    volumes:
+      - 920bot-data:/data
+    restart: unless-stopped
+
+volumes:
+  920bot-data:
+    name: 920bot-data
