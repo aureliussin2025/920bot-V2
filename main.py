@@ -1,4 +1,6 @@
 from fastapi import FastAPI, Depends,HTTPException
+from fastapi.responses import FileResponse
+from pathlib import Path
 from schemas import TradeSignal
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
@@ -12,6 +14,14 @@ from models import Trade, ReturnTrade, ReturnEarning, Buy, Signal, ReturnDuplica
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+
+DASHBOARD_PATH = Path(__file__).with_name("dashboard.html")
+
+
+@app.get("/dashboard", include_in_schema=False)
+def dashboard():
+    """Serve the small read-only trade dashboard."""
+    return FileResponse(DASHBOARD_PATH)
 
 # TradingView sends a JSON signal here. FastAPI turns that JSON into a
 # TradeSignal, while Depends(get_db) provides one database session per request.
